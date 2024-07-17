@@ -80,7 +80,7 @@
           (client-access-token-expires-at client) (+ (get-universal-time)
                                                      (getf response :|expires_in|)))))
 
-(defmethod client-access-token-expired-p (client client)
+(defmethod client-access-token-expired-p ((client client))
   (> (get-universal-time)
      (client-access-token-expires-at client)))
 
