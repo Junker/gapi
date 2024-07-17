@@ -40,7 +40,7 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
   (list :|token| *token*
         :|notification| (list :|title| "Message Title"
                               :|body| "Message body")))
-(gapi:request *client* (format nil "https://fcm.googleapis.com/v1/projects/~A/messages:send"
+(gapi:request *client* (format nil "https://fcm.googleapis.com/v1/projects/~A/messages:send" *project-id*)
               :method :POST :data (list :|message| *message*))
 
 
