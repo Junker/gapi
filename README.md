@@ -22,30 +22,35 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
 (defvar *service-file* "/myproject/config/google-service.json")
 
 ;; Translate
-(defparameter *client* (gapi:make-client-with-service-account service-file 
-                                                        :scopes '("https://www.googleapis.com/auth/cloud-translation")))
+(defparameter *client*
+  (gapi:make-client-with-service-account
+   service-file :scopes '("https://www.googleapis.com/auth/cloud-translation")))
 (defparameter *project-id* (gapi:client-project-id *client*))
 (gapi:auth *client*)
-(gapi:request *client* (format nil "https://translate.googleapis.com/v3beta1/projects/~A:detectLanguage" *project-id*) 
+(gapi:request *client* (format nil
+                               "https://translate.googleapis.com/v3beta1/projects/~A:detectLanguage"
+                               *project-id*)
               :method :POST :payload '(:|content| "Hello"))
 ;; => (:|languages| ((:|confidence| 1 :|languageCode| "en")))
 
 
 ;; FCM
-(defparameter *client* (gapi:make-client-with-service-account service-file 
-                                                        :scopes '("https://www.googleapis.com/auth/firebase.messaging")))
+(defparameter *client*
+  (gapi:make-client-with-service-account
+   service-file  :scopes '("https://www.googleapis.com/auth/firebase.messaging")))
 (defparameter *project-id* (gapi:client-project-id *client*))
 (gapi:auth *client*)
 (defvar *message*
   (list :|token| *token*
         :|notification| (list :|title| "Message Title"
                               :|body| "Message body")))
-(gapi:request *client* (format nil "https://fcm.googleapis.com/v1/projects/~A/messages:send" *project-id*)
+(gapi:request *client* (format nil "https://fcm.googleapis.com/v1/projects/~A/messages:send"
+                               *project-id*)
               :method :POST :data (list :|message| *message*))
 
-
-etc
+;;etc
 ```
 
 ## Documentation
 
+- [Google APIs Explorer](https://developers.google.com/apis-explorer)

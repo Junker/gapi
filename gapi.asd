@@ -1,4 +1,4 @@
-(defsystem "gapi"
+(defsystem gapi
   :version "0.1.0"
   :author "Dmitrii Kosenkov"
   :license "MIT"
