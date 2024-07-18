@@ -1,6 +1,6 @@
 (in-package #:gapi)
 
-(defparameter *token-expiry-length* 3600)
+(defparameter *jwt-token-expiry-length* 3600)
 
 (define-condition gapi-error (error)
   ((code :initarg :code
@@ -46,7 +46,7 @@
       ((asn1:rsa-private-key :private-exponent d :modulus n)
        (ironclad:make-private-key :rsa :d d :n n)))))
 
-(defun %generate-jwt (private-key client-email token-uri scopes &key (expiry-length *token-expiry-length*))
+(defun %generate-jwt (private-key client-email token-uri scopes expiry-length)
   (jose:encode :rs256 private-key `(("iss" . ,client-email)
                                     ("iat" . ,(get-unix-time))
                                     ("exp" . ,(+ (get-unix-time) expiry-length))
@@ -69,13 +69,14 @@
                    :token-uri (getf acc :|token_uri|)
                    :scopes scopes)))
 
-(defmethod generate-jwt ((client client))
+(defmethod generate-jwt ((client client) &key (expiry-length *jwt-token-expiry-length*))
   (with-slots (private-key client-email token-uri scopes) client
-    (%generate-jwt private-key client-email token-uri scopes)))
+    (%generate-jwt private-key client-email token-uri scopes expiry-length)))
 
 
 (defmethod auth ((client client))
-  (let ((response (%auth (client-token-uri client) (generate-jwt client))))
+  (let ((response (%auth (client-token-uri client)
+                         (generate-jwt client))))
     (setf (client-access-token client) (getf response :|access_token|)
           (client-access-token-expires-at client) (+ (get-universal-time)
                                                      (getf response :|expires_in|)))))
@@ -84,10 +85,12 @@
   (> (get-universal-time)
      (client-access-token-expires-at client)))
 
+(defmethod client-authorized-p ((client client))
+  (not (null (client-access-token client))))
 
 (defmethod request ((client client) url &key (method :GET) payload)
   (assert (client-access-token client)
-          nil "Client is not authenticated, use (gapi:auth client)")
+          nil "Client is not authorized, use (gapi:auth client)")
   (handler-case
       (jojo:parse
        (dex:request url

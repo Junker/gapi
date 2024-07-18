@@ -3,8 +3,7 @@
   (:import-from #:local-time
                 #:timestamp-to-unix
                 #:now)
-  (:export #:*token-expiry-length*
-           #:client
+  (:export #:client
            #:client-project-id
            #:client-client-email
            #:client-scopes
