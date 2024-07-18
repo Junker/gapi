@@ -11,6 +11,7 @@
            #:client-access-token
            #:client-access-token-expires-at
            #:client-access-token-expired-p
+           #:client-authorized-p
            #:auth
            #:generate-jwt
            #:request
