@@ -77,9 +77,9 @@
 (defmethod auth ((client client))
   (let ((response (%auth (client-token-uri client)
                          (generate-jwt client))))
-    (setf (client-access-token client) (getf response :|access_token|)
-          (client-access-token-expires-at client) (+ (get-universal-time)
-                                                     (getf response :|expires_in|)))))
+    (setf (client-access-token-expires-at client) (+ (get-universal-time)
+                                                     (getf response :|expires_in|))
+          (client-access-token client) (getf response :|access_token|))))
 
 (defmethod client-access-token-expired-p ((client client))
   (> (get-universal-time)
