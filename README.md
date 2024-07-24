@@ -24,7 +24,7 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
 ;; Translate
 (defparameter *client*
   (gapi:make-client-with-service-account
-   service-file :scopes '("https://www.googleapis.com/auth/cloud-translation")))
+   *service-file* :scopes '("https://www.googleapis.com/auth/cloud-translation")))
 (defparameter *project-id* (gapi:client-project-id *client*))
 (gapi:auth *client*)
 (gapi:request *client* (format nil
@@ -37,7 +37,7 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
 ;; FCM
 (defparameter *client*
   (gapi:make-client-with-service-account
-   service-file  :scopes '("https://www.googleapis.com/auth/firebase.messaging")))
+   *service-file* :scopes '("https://www.googleapis.com/auth/firebase.messaging")))
 (defparameter *project-id* (gapi:client-project-id *client*))
 (gapi:auth *client*)
 (defvar *message*
