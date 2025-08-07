@@ -30,7 +30,8 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
 (gapi:request *client* (format nil
                                "https://translate.googleapis.com/v3beta1/projects/~A:detectLanguage"
                                *project-id*)
-              :method :POST :payload '(:|content| "Hello"))
+              :method :POST
+              :payload '(:|content| "Hello"))
 ;; => (:|languages| ((:|confidence| 1 :|languageCode| "en")))
 
 
@@ -46,7 +47,8 @@ This system can be installed from [UltraLisp](https://ultralisp.org/) like this:
                               :|body| "Message body")))
 (gapi:request *client* (format nil "https://fcm.googleapis.com/v1/projects/~A/messages:send"
                                *project-id*)
-              :method :POST :data (list :|message| *message*))
+              :method :POST 
+              :payload (list :|message| *message*))
 
 ;;etc
 ```
